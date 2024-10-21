@@ -11,7 +11,7 @@ omega = [i+j for i in suits for j in values]
 print('event space: ', omega, sep = '\n')
 
 #define the experiment's parameters
-EXPERIMENT = 4
+EXPERIMENT = 3
 N = 0
 
 if EXPERIMENT == 0:
@@ -23,7 +23,7 @@ elif EXPERIMENT == 2 or EXPERIMENT == 3:
 elif EXPERIMENT == 4:
     N = 5
 
-num_tries = int(1e9)
+num_tries = int(1e7)
 successes = 0
 
 for _ in tqdm(range(num_tries)):

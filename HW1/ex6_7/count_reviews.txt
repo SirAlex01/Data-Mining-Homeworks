@@ -1,0 +1,5 @@
+cut -f1 beers.txt | sort | uniq -c | sort -n -r | head -n 10
+
+wget -qO- --user datamining2021 --password Data-Min1ng-2021 http://aris.me/contents/teaching/data-mining-2024/protected/beers.txt | cut -f1 | sort | uniq -c | sort -n -r | head -n 10
+
+curl -su datamining2021:Data-Min1ng-2021 http://aris.me/contents/teaching/data-mining-2024/protected/beers.txt | cut -f1 | sort | uniq -c | sort -n -r | head -n 10

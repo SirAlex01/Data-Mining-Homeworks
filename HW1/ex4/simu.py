@@ -27,3 +27,4 @@ for i in tqdm(range(tries)):
     #print(a,b,x,res)
 
 print(succ/tries)
+print(2/3+1/(6*N))

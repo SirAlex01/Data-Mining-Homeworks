@@ -63,7 +63,6 @@ def find_all_cycles(graph):
     
     return list(seen)
 
-# Funzione che verifica la condizione dell'esercizio 3
 def ex3(G, cycles):
     if len(cycles) != 2:
         return False
@@ -92,7 +91,6 @@ def ex3(G, cycles):
     # Verifica se gli archi nel grafo sono esattamente quelli dei cicli
     return graph_edges == cycle_edges 
 
-# Funzione che verifica la condizione dell'esercizio 4
 def ex4(G, cycles):
     if len(cycles) != 2:
         return False
@@ -113,6 +111,10 @@ def ex4(G, cycles):
             edge = (cycle[i], cycle[(i + 1) % len(cycle)])
             cycle_edges.add(tuple(sorted(edge)))  # Aggiungi l'arco come una coppia ordinata
     
+    # Verifica che tutti i nodi siano in uno dei cicli
+    if NEW_FOUR and len(node_set) != n:
+        return False
+    
     # Ottieni tutti gli archi nel grafo
     graph_edges = set(tuple(sorted(edge)) for edge in G.edges())
     
@@ -130,39 +132,71 @@ def ex6(G):
     return len(G.edges())
 
 def ex7(G):
-    # Define the edges of the papillon structure
+    # Definisce gli archi della struttura del papillon
     papillon_edges = [
-        (0, 1), (0, 2), (1, 2),  # Triangle part v1, v2, v3
-        (0, 3), (0, 4), (3, 4)   # "Wings" formed by v1, v4, v5
+        (0, 1), (0, 2), (1, 2),  # Parte triangolare v1, v2, v3
+        (0, 3), (0, 4), (3, 4)   # "Ali" formate da v1, v4, v5
     ]
     
-    unique_papillons = set()  # Set to store unique papillon edge sets
+    unique_papillons = 0  # Contatore per papillon unici
 
-    # Check all combinations of 5 nodes in the graph
+    # Definisci solo le 15 permutazioni distintive che mantengono le caratteristiche del papillon
+    unique_permutations = [
+        (0, 1, 2, 3, 4), (1, 0, 2, 3, 4), (2, 0, 1, 3, 4), (3, 0, 1, 2, 4), (4, 0, 1, 2, 3),
+        (0, 1, 3, 2, 4), (1, 0, 3, 2, 4), (2, 0, 3, 1, 4), (3, 0, 2, 1, 4), (4, 0, 2, 1, 3),
+        (0, 1, 4, 3, 2), (1, 0, 4, 3, 2), (2, 0, 4, 3, 1), (3, 0, 4, 2, 1), (4, 0, 3, 2, 1)
+    ]
+
+    # Controlla tutte le combinazioni di 5 nodi nel grafo
     for nodes in itertools.combinations(G.nodes(), 5):
-        subgraph = G.subgraph(nodes)  # Create a subgraph with the chosen 5 nodes
+        subgraph = G.subgraph(nodes)  # Crea un sottografo con i 5 nodi scelti
 
-        # Try every permutation of the 5 nodes as a potential mapping to papillon roles
-        for permuted_nodes in itertools.permutations(nodes):
-            # Map permuted nodes to papillon node roles
-            node_map = {i: permuted_nodes[i] for i in range(5)}
+        # Prova solo le 15 permutazioni uniche
+        for perm in unique_permutations:
+            # Mappa i nodi permutati ai ruoli del papillon
+            node_map = {i: nodes[perm[i]] for i in range(5)}
             
-            # Map the edges of the *papillon* pattern to the nodes in the current permutation
-            papillon_edges_mapped = {(min(node_map[u], node_map[v]), max(node_map[u], node_map[v])) for u, v in papillon_edges}
+            # Mappa gli archi della struttura del papillon ai nodi della permutazione corrente
+            papillon_edges_mapped = [(node_map[u], node_map[v]) for u, v in papillon_edges]
             
-            # Check if the subgraph contains exactly the papillon edges
+            # Controlla se il sottografo contiene esattamente gli archi del papillon
             if subgraph.size() == 6 and all(subgraph.has_edge(u, v) for u, v in papillon_edges_mapped):
-                # Add the frozen set of edges as a unique papillon
-                unique_papillons.add(frozenset(papillon_edges_mapped))
+                # Incrementa il contatore dei papillon unici trovati
+                unique_papillons += 1
+                break  # Interrompi il ciclo se trovi un papillon per questo insieme di nodi
+                
+    return unique_papillons  # Restituisci il conteggio dei papillon unici
 
-    return len(unique_papillons)  # Return the count of unique papillon subgraphs
+def generate_unique_graph_permutations(G):
+    unique_graphs = set()
+    nodes = list(G.nodes())
+    
+    # Genera tutte le permutazioni dei nodi
+    for perm in itertools.permutations(nodes):
+        # Crea una mappatura dei nodi secondo la permutazione corrente
+        mapping = {original: permuted for original, permuted in zip(nodes, perm)}
+        # Applica la mappatura ai nodi del grafo per creare una nuova configurazione
+        permuted_graph = nx.relabel_nodes(G, mapping, copy=True)
+        
+        # Genera una rappresentazione immutabile (frozenset) per controllare l'unicità del grafo
+        permuted_edges = frozenset((min(u, v), max(u, v)) for u, v in permuted_graph.edges())
+        
+        # Aggiungi il grafo solo se non è già stato generato
+        if permuted_edges not in unique_graphs:
+            unique_graphs.add(permuted_edges)
+            #print(f"Nuova configurazione trovata con permutazione: {perm}")
+    
+    # Restituisce il numero di grafi distinti generati
+    return len(unique_graphs)
+
 
 # Parametri per il grafo Erdős-Rényi
-n = 6 # Numero di nodi (deve essere pari per suddividere in cicli di n/2 nodi)
+n = 9 # Numero di nodi (deve essere pari per suddividere in cicli di n/2 nodi)
 p = 0.3  # Probabilità di creazione degli archi
-num_iterations = int(1e6)  # Numero di iterazioni (puoi ridurre per test più veloci)
+num_iterations = int(1e7)  # Numero di iterazioni (puoi ridurre per test più veloci)
 successes = 0
-EXERCISE = 7
+EXERCISE = 4
+NEW_FOUR = True
 
 # Esegui il test per num_iterations volte
 for i in tqdm(range(num_iterations)):
@@ -190,9 +224,8 @@ for i in tqdm(range(num_iterations)):
     else:
         successes += res
 
-    if res:
-        print("PORCAMADONNA",res)
-        plot_graph(G)
+    #if res:
+    #    plot_graph(G)
 
 
 #check correctness
@@ -215,11 +248,15 @@ elif EXERCISE == 4:
     for i in range(3, n-2):
         for j in range(3, n-i+1):
             res += multinomial_coeff(n,[i,j,n-i-j]) * factorial(i-1) * factorial(j-1) * p**(i+j) * (1-p)**(multinomial_coeff(n, [2,n-2])-i-j) / 8 
+    if NEW_FOUR: 
+        res = 0.0
+        for i in range(3, n-2):
+            res += multinomial_coeff(n, [i, n-i])*factorial(i-1)*factorial(n-i-1)*p**n*(1-p)**(multinomial_coeff(n,[2,n-2])-n)/8
 elif EXERCISE == 5:
     res = (n-1)*p
 elif EXERCISE == 6:
     res = multinomial_coeff(n, [2,n-2])*p
 elif EXERCISE == 7:
-    res = multinomial_coeff(n, [5,n-5])*(p**6)*((1-p)**(4+(n-5)*5))
+    res = multinomial_coeff(n, [5,n-5])*(p**6)*((1-p)**4)*15
 print(res)
 

@@ -56,12 +56,14 @@ def find_all_cycles(graph):
     
     # Eliminate duplicates by sorting nodes within the cycle and using set
     seen = set()
+    res = []
     for cycle in all_cycles:
         cycle_sorted = tuple(sorted(cycle))
         if cycle_sorted not in seen:
             seen.add(cycle_sorted)
+            res.append(cycle)
     
-    return list(seen)
+    return res
 
 def ex3(G, cycles):
     if len(cycles) != 2:
@@ -191,12 +193,15 @@ def generate_unique_graph_permutations(G):
 
 
 # Parametri per il grafo Erdős-Rényi
-n = 9 # Numero di nodi (deve essere pari per suddividere in cicli di n/2 nodi)
+n = 8 # Numero di nodi (deve essere pari per suddividere in cicli di n/2 nodi)
 p = 0.3  # Probabilità di creazione degli archi
 num_iterations = int(1e7)  # Numero di iterazioni (puoi ridurre per test più veloci)
 successes = 0
-EXERCISE = 4
-NEW_FOUR = True
+EXERCISE = 3
+NEW_FOUR = False
+
+print("n =",n)
+print("tested exercise:",EXERCISE)
 
 # Esegui il test per num_iterations volte
 for i in tqdm(range(num_iterations)):
@@ -239,7 +244,6 @@ def multinomial_coeff(n, ks):
         denominator *= factorial(k)
     return numerator // denominator
 
-
 if EXERCISE == 3:
     assert(n % 2 == 0)
     res = multinomial_coeff(n,[n // 2]*2) * (p**n) * ((1-p)**(multinomial_coeff(n, [2,n-2])-n)) * (factorial(n//2-1)**2) / 8
@@ -247,11 +251,12 @@ elif EXERCISE == 4:
     res = 0.0
     for i in range(3, n-2):
         for j in range(3, n-i+1):
-            res += multinomial_coeff(n,[i,j,n-i-j]) * factorial(i-1) * factorial(j-1) * p**(i+j) * (1-p)**(multinomial_coeff(n, [2,n-2])-i-j) / 8 
+            res += multinomial_coeff(n,[i,j,n-i-j]) * factorial(i-1) * factorial(j-1) * (p**(i+j)) * ((1-p)**(multinomial_coeff(n, [2,n-2])-i-j)) / 8 
     if NEW_FOUR: 
         res = 0.0
         for i in range(3, n-2):
-            res += multinomial_coeff(n, [i, n-i])*factorial(i-1)*factorial(n-i-1)*p**n*(1-p)**(multinomial_coeff(n,[2,n-2])-n)/8
+            res += multinomial_coeff(n, [i, n-i]) * factorial(i-1) * factorial(n-i-1) * (p**n) * ((1-p)**(multinomial_coeff(n,[2,n-2])-n)) / 8
+   
 elif EXERCISE == 5:
     res = (n-1)*p
 elif EXERCISE == 6:

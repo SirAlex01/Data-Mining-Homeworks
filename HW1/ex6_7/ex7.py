@@ -18,6 +18,12 @@ with open(file_name) as file:
 
 os.remove(file_name)
 
+#check ex6
+#beers_by_rev = sorted(beers.keys(), key=lambda beer: beers[beer][1], reverse=True)
+#print("Beers with highest number of reviews:")
+#for beer in beers_by_rev[:10]: 
+#    print(f"{beer}: {beers[beer][1]}")
+
 #filter out beers with <100 reviews
 for beer in list(beers.keys()):
     if beers[beer][1] < 100:

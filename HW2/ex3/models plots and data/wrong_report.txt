@@ -1,0 +1,4 @@
+Logistic Regression - proportion of outliers in wrong predictions: 0/39798 (0.00%)
+Logistic Regression - Correlation between ARR_DELAY and DEP_DELAY among wrong predictions: 0.26
+Random Forest - proportion of outliers in wrong predictions: 1031/52444 (1.97%)
+Random Forest - Correlation between ARR_DELAY and DEP_DELAY among wrong predictions: 0.93

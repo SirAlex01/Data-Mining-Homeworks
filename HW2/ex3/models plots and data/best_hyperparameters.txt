@@ -1,0 +1,2 @@
+Best Hyperparameters for Logistic Regression: regParam: 0.01, elasticNetParam: 0.0
+Best Hyperparameters for Random Forest: numTrees: 20, maxDepth: 20

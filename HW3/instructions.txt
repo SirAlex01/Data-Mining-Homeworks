@@ -1,0 +1,12 @@
+In the provided code there are two possible modes to choose the parameters for LSH:
+MODE = {choose_bands, choose_rows}
+In the first mode you can select the number of bands (b) for LSH and the number of rows per band will be chosen accordingly
+In the second mode you can select the number of rows per band for LSH and the number of bands will be chosen accordingly
+In both cases the missing parameter will be chosen taking into account the threshold estimation formula (provided in the textbook):
+s = (1/b) ^ (1/r)
+With s = 0.8 (as requested) and b or r having the inserted parameter according to the selected mode.
+The length of the signature will of course be n = r*b.
+Choose r and b properly (especially, don't exaggerate with r in choose_rows mode), as I didn't bound huge values of n.
+
+r,b plotted values calculated from the script
+https://www.desmos.com/calculator/uvvdnlfkjb

@@ -157,6 +157,7 @@ with open("products.tsv", mode='r', encoding='utf-8') as f:
     signatures = []
     shingles_list = []
     hashFn = hashFamily(0)
+    elapsed_minhash = 0
     for i, row in enumerate(reader):
         product_text = row[0]  
         products.append(row)
@@ -167,7 +168,9 @@ with open("products.tsv", mode='r', encoding='utf-8') as f:
         # hash the shingles
         hashed = sh.hashShingles(shingles, hashFn)
         # generate the minwise hashing signature of the hashed shingles
+        start = time.time()
         sign = mh.generateSignature(hashed)
+        elapsed_minhash += time.time() - start
         signatures.append(sign)
 
 lsh = LSH(b, r)
@@ -179,7 +182,7 @@ nn = NearestNeighbors()
 start = time.time()
 real = nn.findNearestNeighbors(shingles_list, threshold=s)
 elapsed_nn = time.time() - start
-print(f"LSH took {elapsed_lsh} seconds")
+print(f"LSH took {elapsed_lsh} seconds (including also minwise hashing signatures generation: {elapsed_minhash+elapsed_lsh})")
 print(f"Nearest neighbors took {elapsed_nn} seconds")
 
 print(f"LSH found {len(candidates)} near-duplicates")

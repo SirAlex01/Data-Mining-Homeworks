@@ -1,0 +1,3 @@
+I delivered a notebook that you should run using google colab.
+Instead of uploading it on your own account, you can simply run it using the following link to my own notebook:
+https://colab.research.google.com/drive/1FsUFKhqD3X4JFh05g_ZKHf7-XLfLojq4?usp=sharing

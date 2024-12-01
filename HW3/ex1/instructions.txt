@@ -8,5 +8,5 @@ With s = 0.8 (as requested) and b or r having the inserted parameter according t
 The length of the signature will of course be n = r*b.
 Choose r and b properly (especially, don't exaggerate with r in choose_rows mode), as I didn't bound huge values of n.
 
-r,b plotted values calculated from the script
+r,b plotted values calculated from the script:
 https://www.desmos.com/calculator/uvvdnlfkjb

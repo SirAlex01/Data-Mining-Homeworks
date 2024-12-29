@@ -1,0 +1,12 @@
+{
+    "lr": 0.01,
+    "hidden_dim": 32,
+    "output_dim": 16,
+    "weight_decay": 1e-05,
+    "epochs": 100,
+    "dropout_rate": 0,
+    "num_layers": 2,
+    "heads": 16,
+    "concat": true,
+    "mode": "dp"
+}

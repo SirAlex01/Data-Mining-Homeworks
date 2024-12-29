@@ -1,0 +1,9 @@
+{
+    "embedding_dim": 128,
+    "p": 1.0,
+    "q": 0.5,
+    "node2vec_lr": 0.01,
+    "lr_lr": 0.01,
+    "epochs_n2v": 100,
+    "batch_size": 64
+}
